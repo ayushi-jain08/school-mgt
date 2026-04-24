@@ -1,5 +1,7 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
+const fs = require('fs');
+const path = require('path');
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -8,7 +10,8 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME,
   port: process.env.DB_PORT || 3306,
   ssl: {
-    rejectUnauthorized: false // Required for cloud databases like Aiven/PlanetScale
+    ca: fs.readFileSync(path.join(__dirname, '../ca.pem')),
+    rejectUnauthorized: true
   },
   waitForConnections: true,
   connectionLimit: 10,
