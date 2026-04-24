@@ -30,7 +30,10 @@ exports.addSchool = async (req, res) => {
     });
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return res.status(400).json({ errors: err.errors });
+      return res.status(400).json({ 
+        message: "Validation failed", 
+        errors: err.flatten().fieldErrors 
+      });
     }
     console.error("Database Error: ", err);
     res.status(500).json({ error: 'Internal server error' });
@@ -57,7 +60,10 @@ exports.listSchools = async (req, res) => {
     res.status(200).json(schoolsWithDistance);
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return res.status(400).json({ errors: err.errors });
+      return res.status(400).json({ 
+        message: "Validation failed", 
+        errors: err.flatten().fieldErrors 
+      });
     }
     console.error("Database Error: ", err);
     res.status(500).json({ error: 'Internal server error' });
